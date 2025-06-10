@@ -1,0 +1,9 @@
+name: Descend
+version: '1.0-SNAPSHOT'
+main: fun.mntale.descend.Descend
+api-version: '1.21'
+authors: [ MidnightTale_ ]
+website: https://mntale.fun
+folia-supported: true
+depend:
+  - packetevents
