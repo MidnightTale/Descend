@@ -1,0 +1,6 @@
+name: Descend
+version: '${version}'
+main: fun.mntale.descend.Descend
+api-version: '1.21'
+authors: [ MidnightTale_ ]
+folia-supported: true

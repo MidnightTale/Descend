@@ -1,14 +1,16 @@
 plugins {
     id 'java'
     id("xyz.jpenilla.run-paper") version "2.3.1"
-    id 'com.gradleup.shadow' version '9.0.0-beta15'
+    id("io.papermc.paperweight.userdev") version "2.0.0-beta.17"
+    id 'com.gradleup.shadow' version '9.0.0-rc1'
 }
 
 group = 'fun.mntale'
-version = '1.0-SNAPSHOT'
+version = '1.0'
 
 repositories {
     mavenCentral()
+    mavenLocal()
     maven {
         name = "papermc-repo"
         url = "https://repo.papermc.io/repository/maven-public/"
@@ -17,14 +19,16 @@ repositories {
         name = "sonatype"
         url = "https://oss.sonatype.org/content/groups/public/"
     }
-    maven { url = uri("https://repo.codemc.io/repository/maven-releases/") }
-
-    maven { url = uri("https://repo.codemc.io/repository/maven-snapshots/") }
+    maven {
+        name = "tcoded-releases"
+        url = "https://repo.tcoded.com/releases"
+    }
 }
 
+
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21.5-R0.1-SNAPSHOT")
-    compileOnly("com.github.retrooper:packetevents-spigot:2.8.0")
+    paperweight.paperDevBundle("1.21.8-R0.1-SNAPSHOT")
+    implementation("com.tcoded:FoliaLib:0.5.1")
 }
 
 tasks {
@@ -32,9 +36,11 @@ tasks {
         // Configure the Minecraft version for our task.
         // This is the only required configuration besides applying the plugin.
         // Your plugin's jar (or shadowJar if present) will be used automatically.
-        minecraftVersion("1.21")
+        minecraftVersion("1.21.8")
     }
 }
+
+paperweight.reobfArtifactConfiguration = io.papermc.paperweight.userdev.ReobfArtifactConfiguration.getMOJANG_PRODUCTION()
 
 def targetJavaVersion = 21
 java {
@@ -54,11 +60,15 @@ tasks.withType(JavaCompile).configureEach {
     }
 }
 
+tasks.shadowJar {
+    relocate("com.tcoded.folialib", "fun.mntale.midnightchair.lib.folialib")
+}
+
 processResources {
     def props = [version: version]
     inputs.properties props
     filteringCharset 'UTF-8'
-    filesMatching('plugin.yml') {
+    filesMatching('paper-plugin.yml') {
         expand props
     }
 }
